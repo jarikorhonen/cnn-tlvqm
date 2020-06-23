@@ -1,5 +1,7 @@
 # CNN-TLVQM
 
+![CNN-TLVQM diagram](https://github.com/jarikorhonen/cnn-tlvqm/blob/master/cnn-tlvqm_small.png)
+
 The instructions for reproducing the model and the results for KoNViD-1k dataset using CNN-TLVQM video quality model are given here.
 
 The model is implemented in Matlab (we have used version R2018b), including Image Processing Toolbox and Deep Learning Toolbox.
