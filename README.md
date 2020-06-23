@@ -41,12 +41,15 @@ Then, you can use Matlab script:
 >>  computeFeaturesForKonvid1k.m 
 ```
 Note that you need to change the file names and paths in the script as follows:
-
+```
 konvid_path: path to the KoNViD-1k database (e.g. 'c:\\KoNViD-1k').
-konvid_mos_file: the file with pre-processed KoNViD-1k MOS values and frame rates, included in this zip file (by default, '.\\konvid_mos_fr.csv').
-cnn_model_file: the file for the CNN model trained in step 2 (e.g. 'c:\\CNN_model.mat').
-feature_file: path to the folder where the resulting feature file is saved (e.g. 'c:\\KoNViD-1k\\KoNViD_features.mat'). The script will save the features in Matlab data file 'KONVID_features.mat'.
 
+konvid_mos_file: the file with pre-processed KoNViD-1k MOS values and frame rates, included in this zip file (by default, '.\\konvid_mos_fr.csv').
+
+cnn_model_file: the file for the CNN model trained in step 2 (e.g. 'c:\\CNN_model.mat').
+
+feature_file: path to the folder where the resulting feature file is saved (e.g. 'c:\\KoNViD-1k\\KoNViD_features.mat'). The script will save the features in Matlab data file 'KONVID_features.mat'.
+```
 
 ### 4) Training and testing the regression models 
 
