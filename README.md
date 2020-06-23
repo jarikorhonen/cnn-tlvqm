@@ -48,7 +48,6 @@ feature_file: path to the folder where the resulting feature file is saved (e.g.
 
 
 ### 4) Training and testing the regression models 
----------------------------------------------
 
 There are two scripts for this purpose, for SVR and LSTM, respectively. They can be used as:
 ```
