@@ -12,7 +12,7 @@ Training images (patches) are created from LIVE in the Wild Image Quality Challe
 
 In Matlab, the training data (224x224 patches) can be created by using:
 
->> processLiveChallenge(path, out_path);
+\>\> processLiveChallenge(path, out_path);
 
 where path is the path to the LIVE Challenge database (e.g. 'c:\\LiveChallenge') and out_path is the path to the produced training images (e.g. 'c:\\Training_Images'). The script will produce training images and their respective probabilistic quality scores, stored in Matlab data file 'LiveC_prob.mat' in the folder out_path.
 
