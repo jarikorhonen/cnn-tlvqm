@@ -2,7 +2,21 @@
 
 ![CNN-TLVQM diagram](https://github.com/jarikorhonen/cnn-tlvqm/blob/master/cnn-tlvqm_small.png)
 
-The instructions for reproducing the model and the results for KoNViD-1k dataset using CNN-TLVQM video quality model are given here.
+CNN-TLVQM is an improved version of Two-Level Video Quality Model (TLVQM) (https://github.com/jarikorhonen/nr-vqa-consumervideo), where the spatial high complexity (HC) features are replaced by a feature extractor based on convolutional neural network (CNN). The results we have obtained with the model, compared to some well known benchmarks, are shown in the Tables below.
+
+**Results with KoNViD-1k dataset [KoNViD-1k](http://database.mmsp-kn.de/konvid-1k-database.html):**
+
+| **Method** |	**PLCC** |	**SROCC** |	**RMSE** |
+|--|--|--|--|
+| HIGRADE | 0.72 |	0.73 |	0.447 |
+| FRIQUEE | 0.74 |	0.75 |	0.430 |
+| VBLIINDS |	0.62 |	0.64 |	0.506 |
+| TLVQM	| 0.76 |	0.77 |	0.416 |
+| CNN-TLVQM (SVR)	| 0.83 |	0.83 |	0.358 |
+| CNN-TLVQM (LSTM) |	0.82 |	0.82 |	0.365 |
+
+
+The instructions for reproducing the model and the results for KoNViD-1k dataset using CNN-TLVQM video quality model are given below.
 
 The model is implemented in Matlab (we have used version R2018b), including Image Processing Toolbox and Deep Learning Toolbox.
 
@@ -42,13 +56,13 @@ Then, you can use Matlab script:
 ```
 Note that you need to change the file names and paths in the script as follows:
 
-*konvid_path:* path to the KoNViD-1k database (e.g. 'c:\\KoNViD-1k').
+**konvid_path:** path to the KoNViD-1k database (e.g. 'c:\\KoNViD-1k').
 
-*konvid_mos_file:* the file with pre-processed KoNViD-1k MOS values and frame rates, included in this zip file (by default, '.\\konvid_mos_fr.csv').
+**konvid_mos_file:** the file with pre-processed KoNViD-1k MOS values and frame rates, included in this zip file (by default, '.\\konvid_mos_fr.csv').
 
-*cnn_model_file:* the file for the CNN model trained in step 2 (e.g. 'c:\\CNN_model.mat').
+**cnn_model_file:** the file for the CNN model trained in step 2 (e.g. 'c:\\CNN_model.mat').
 
-*feature_file:* path to the folder where the resulting feature file is saved (e.g. 'c:\\KoNViD-1k\\KoNViD_features.mat'). The script will save the features in Matlab data file 'KONVID_features.mat'.
+**feature_file:** path to the folder where the resulting feature file is saved (e.g. 'c:\\KoNViD-1k\\KoNViD_features.mat'). The script will save the features in Matlab data file 'KONVID_features.mat'.
 
 
 ### 4) Training and testing the regression models 
