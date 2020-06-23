@@ -22,7 +22,7 @@ CNN-TLVQM is an improved version of Two-Level Video Quality Model (TLVQM) (https
 | HIGRADE	| 0.54 | 0.59 | 15.3 | 
 | FRIQUEE	| 0.68 | 0.66 | 12.6 | 
 | VBLIINDS	| 0.67 | 0.66 | 13.3 | 
-| TLVQM	0.79 | 0.80 | 10.5 | 
+| TLVQM	| 0.79 | 0.80 | 10.5 | 
 | CNN-TLVQM (SVR)	| 0.84 | 0.83 | 9.4 | 
 | CNN-TLVQM (LSTM)	| 0.77 | 0.75 | 11.1 | 
 
