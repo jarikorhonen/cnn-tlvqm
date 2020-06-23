@@ -4,7 +4,7 @@
 
 CNN-TLVQM is an improved version of Two-Level Video Quality Model (TLVQM) (https://github.com/jarikorhonen/nr-vqa-consumervideo), where the spatial high complexity (HC) features are replaced by a feature extractor based on convolutional neural network (CNN). The results we have obtained with the model, compared to some well known benchmarks, are shown in the Tables below.
 
-**Results with KoNViD-1k dataset [KoNViD-1k](http://database.mmsp-kn.de/konvid-1k-database.html):**
+**Results with [KoNViD-1k](http://database.mmsp-kn.de/konvid-1k-database.html) dataset:**
 
 | **Method** |	**PLCC** |	**SROCC** |	**RMSE** |
 |--|--|--|--|
@@ -14,6 +14,17 @@ CNN-TLVQM is an improved version of Two-Level Video Quality Model (TLVQM) (https
 | TLVQM	| 0.76 |	0.77 |	0.416 |
 | CNN-TLVQM (SVR)	| 0.83 |	0.83 |	0.358 |
 | CNN-TLVQM (LSTM) |	0.82 |	0.82 |	0.365 |
+
+**Results with [LIVE VQC](https://live.ece.utexas.edu/research/LIVEVQC/index.html) dataset:**
+
+| **Method** |	**PLCC** |	**SROCC** |	**RMSE** |
+|--|--|--|--|
+| HIGRADE	| 0.54 | 0.59 | 15.3 | 
+| FRIQUEE	| 0.68 | 0.66 | 12.6 | 
+| VBLIINDS	| 0.67 | 0.66 | 13.3 | 
+| TLVQM	0.79 | 0.80 | 10.5 | 
+| CNN-TLVQM (SVR)	| 0.84 | 0.83 | 9.4 | 
+| CNN-TLVQM (LSTM)	| 0.77 | 0.75 | 11.1 | 
 
 
 The instructions for reproducing the model and the results for KoNViD-1k dataset using CNN-TLVQM video quality model are given below.
