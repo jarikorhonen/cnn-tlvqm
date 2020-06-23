@@ -29,7 +29,6 @@ Note that in Matlab 2018b, for freezeWeights and createLgraphUsingConnections, y
 ```  
 >> addpath([matlabroot,'\\examples\\nnet\\main']);
 ```
-For convenience, we have also included pre-trained model in file CNN_model.mat.
 
 ### 3) Extracting the sequences of features from KoNViD-1k video sequences 
 
