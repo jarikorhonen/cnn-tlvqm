@@ -57,6 +57,8 @@ Note that in Matlab 2018b, for freezeWeights and createLgraphUsingConnections, y
 >> addpath([matlabroot,'\\examples\\nnet\\main']);
 ```
 
+You can also download pre-trained model for Matlab [here](https://mega.nz/file/Tdxi1IAQ#_G6y6UXcOdjPsWaVhVULPcqwMNmh0YW26Jhg-pcC6aY).
+
 ### 3) Extracting the sequences of features from KoNViD-1k video sequences 
 
 First, you need to obtain KoNVid-1k from: http://database.mmsp-kn.de/konvid-1k-database.html. Note that the video files in the database are distributed as compressed MP4 files, and you need to decompress them to YUV4:2:0 format (\*.yuv files) before extracting the features. You can use e.g. ffmpeg (http://ffmpeg.org) for decoding.
