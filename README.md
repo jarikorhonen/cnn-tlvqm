@@ -1,7 +1,5 @@
 # CNN-TLVQM
 
-![CNN-TLVQM diagram](https://github.com/jarikorhonen/cnn-tlvqm/blob/master/cnn-tlvqm_small.png)
-
 CNN-TLVQM is an improved version of Two-Level Video Quality Model (TLVQM) (https://github.com/jarikorhonen/nr-vqa-consumervideo), where the spatial high complexity (HC) features are replaced by a feature extractor based on convolutional neural network (CNN). The results we have obtained with the model, compared to some well known benchmarks, are shown in the Tables below.
 
 **Results with [KoNViD-1k](http://database.mmsp-kn.de/konvid-1k-database.html) dataset:**
