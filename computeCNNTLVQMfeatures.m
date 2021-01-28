@@ -1,73 +1,71 @@
 %-------------------------------------------------------------------------
 %
 %  computeCNNTLVQMfeatures.m
-%
-%  Written by Jari Korhonen, Shenzhen University
 %  
 %  Use this function to compute CNN-TLVQM features. 
 %  This implementation is based on the the original TLVQM 
 %  implementation published in 
 %  https://github.com/jarikorhonen/nr-vqa-consumervideo
 %
+%  Changes to the earlier version: accepts encoded video (e.g. avi or
+%  mp4) as input, instead of raw YUV files.
+%
+%
 %  Input: 
-%           test_video:    Path to the test video file (YUV420 format)
-%           reso:          Resolution of the YUV video [width,height]
-%           blk_len:       Length of the block segment used for feature
-%                          computation (e.g. number of frames per second
-%                          for one second blocks)
+%           test_video:    Path to the test video file (e.g. avi, mp4)
 %           cnn:           Convolutional neural network for spatial
 %                          feature extraction
+%           cpugpu:        For using CPU, set to 'cpu', and for using 
+%                          GPU, set to 'gpu'
 %
 %  Output:
 %           all_features:  Resulting sequence of feature vectors (one
 %                          vector for each block segment)
 %
 
-function all_features = computeCNNTLVQMfeatures(test_video, reso, ...
-                                                blk_len, cnn)
+function all_features = computeCNNTLVQMfeatures(test_video, cnn, cpugpu)
     
-    width = reso(1);
-    height = reso(2);
-
     % Try to open test_video; if cannot, return
-    test_file = fopen(test_video,'r');
-    if test_file == -1
-        fprintf('Test YUV file not found.');
+    if not(isfile(test_video))
+        fprintf('Video file %s not found.', test_video);
         all_features = [];
         return;
     end
-  
-    % Open test video file
-    fseek(test_file, 0, 1);
-    file_length = ftell(test_file);
-    fprintf('Video file size: %d bytes (%d frames)\n',file_length, ...
-            floor(file_length/width/height/1.5));
-    
-    frame_start = 1; 
-    frame_end = (floor(file_length/width/height/1.5)-5);
-    first_frame_loaded = 0;
+    vreader = VideoReader(test_video);                                        
+    width = vreader.Width; 
+    height = vreader.Height; 
+    blk_len = vreader.FrameRate; 
+    frate = vreader.FrameRate;
+    frame_start = 2;
+    frame_end = vreader.NumFrames-4;
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Loop through all the frames in the frame_range to compute the 
     % temporal features
     %
-    fprintf('Computing LC features for frames %d..%d\n', ...
-            frame_start, frame_end);
-     
     LC_features_all = [];
     for i = frame_start:2:frame_end
         
         % Read frames i-i, i and i+1 (note that frame_start must be > 0)
-        if first_frame_loaded
-            prev_YUV_frame = next_YUV_frame;
-            this_YUV_frame = YUVread(test_file,[width height],i);
-            next_YUV_frame = YUVread(test_file,[width height],i+1);
+        if i == frame_start
+            RGBframes = read(vreader, [i-1 i+1]);
         else
-            prev_YUV_frame = YUVread(test_file,[width height],i-1);
-            this_YUV_frame = YUVread(test_file,[width height],i);
-            next_YUV_frame = YUVread(test_file,[width height],i+1);
-            first_frame_loaded = 1;
-        end
+            RGBframes(:,:,:,1) = RGBframes(:,:,:,3);
+            RGBframes(:,:,:,2:3) = read(vreader, [i i+1]);
+        end 
+
+        prev_YUV_frame = rgb2ycbcr(cast(RGBframes(:,:,:,1),'double')./255);
+        this_YUV_frame = rgb2ycbcr(cast(RGBframes(:,:,:,2),'double')./255);
+        next_YUV_frame = rgb2ycbcr(cast(RGBframes(:,:,:,3),'double')./255);
+        
+        % Scaling of YUV to range [0,1], for compatibility with the
+        % earlier version
+        prev_YUV_frame(:,:,1) = (prev_YUV_frame(:,:,1)-1/16)*255/219;
+        prev_YUV_frame(:,:,2:3) = (prev_YUV_frame(:,:,2:3)-1/16)*255/224;
+        this_YUV_frame(:,:,1) = (this_YUV_frame(:,:,1)-1/16)*255/219;
+        this_YUV_frame(:,:,2:3) = (this_YUV_frame(:,:,2:3)-1/16)*255/224;
+        next_YUV_frame(:,:,1) = (next_YUV_frame(:,:,1)-1/16)*255/219;
+        next_YUV_frame(:,:,2:3) = (next_YUV_frame(:,:,2:3)-1/16)*255/224;
 
         % Compute temporal features for each frame
         ftr_vec = compute_LC_features(this_YUV_frame, ...
@@ -85,7 +83,6 @@ function all_features = computeCNNTLVQMfeatures(test_video, reso, ...
     LC_features = [];
     n_temp_vecs = length(LC_features_all(:,1)); 
     half_blk_len = floor(blk_len/2);
-    fprintf('Pooling LC and consistency features\n');
     if frame_end-frame_start>blk_len
         
         for i=1:half_blk_len:n_temp_vecs-half_blk_len
@@ -95,10 +92,10 @@ function all_features = computeCNNTLVQMfeatures(test_video, reso, ...
                       
             % Compute onsistency features
             blr_si_corr = 0;
-            if std(LC_features_all(i_start:i_end,11))>0 && ...
-               std(LC_features_all(i_start:i_end,12))>0
-                blr_si_corr = corr(LC_features_all(i_start:i_end,11),...
-                                   LC_features_all(i_start:i_end,12));
+            if std(LC_features_all(i_start:i_end,12))>0 && ...
+               std(LC_features_all(i_start:i_end,2))>0
+                blr_si_corr = corr(LC_features_all(i_start:i_end,12),...
+                                   LC_features_all(i_start:i_end,2));
             end
             cons_features = [cons_features; 
                              std(LC_features_all(i_start:i_end,1:22))...
@@ -119,6 +116,7 @@ function all_features = computeCNNTLVQMfeatures(test_video, reso, ...
     i_start = 1; 
     i = 1;
     fr_idx = [];
+    % all_features = LC_features;
     
     % First, find the representative frames
     while i < (n_temp_vecs-half_blk_len)
@@ -135,24 +133,20 @@ function all_features = computeCNNTLVQMfeatures(test_video, reso, ...
     % Compute the High Complexity features for the representative frames
     CNN_features = [];
     for i=fr_idx
-        YUV_frame = YUVread(test_file,[width height],frame_start+(i-1)*2);
-        fprintf('Computing HC features for the frame %d\n',...
-                frame_start+(i-1)*2);
-        ftrs = compute_CNN_features(YUV_frame, cnn);
+        RGBframe = read(vreader,frame_start+(i-1)*2);
+        ftrs = compute_CNN_features(RGBframe, cnn, cpugpu);
         CNN_features = [CNN_features; ftrs];
     end
     
     % Combine feature vectors into feature sequences
     num_blks = length(CNN_features(:,1));
-    reso_fr = [ones(num_blks,1)*reso(1)/1920 ones(num_blks,1)*blk_len/30];
+    reso_fr = [ones(num_blks,1)*max(width,height)/1920 ...
+               ones(num_blks,1)*frate/30];
     if length(CNN_features(:,1))<length(LC_features(:,1))
         LC_features=LC_features(1:length(CNN_features(:,1)),:);
         cons_features=cons_features(1:length(CNN_features(:,1)),:);
     end
     all_features = [reso_fr LC_features cons_features CNN_features];
-    
-    fclose(test_file);
-
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -641,11 +635,8 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This function computes the high complexity features
 %
-function features = compute_CNN_features(im, cnn)
+function features = compute_CNN_features(im, cnn, cpugpu)
 
-    % Initializations
-    im = ycbcr2rgb(im).*255;
-    
     % Extrat patches and spatial activity vector
     [patches,si_vec] = extract_patches(im);
     
@@ -657,7 +648,7 @@ function features = compute_CNN_features(im, cnn)
     % Loop through all the patches to extract features for them
     for i=1:length(si_vec)
         features(:,i) = activations(cnn,patches(:,:,:,idx(i)),layer, ...
-                        'OutputAs','rows','ExecutionEnvironment','cpu')';
+                        'OutputAs','rows','ExecutionEnvironment',cpugpu)';
     end 
     
     % Multiply all the feature vectors and by their respective weights
