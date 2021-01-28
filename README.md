@@ -1,16 +1,26 @@
 # CNN-TLVQM
 
-CNN-TLVQM is an improved version of Two-Level Video Quality Model (TLVQM) (https://github.com/jarikorhonen/nr-vqa-consumervideo), where the spatial high complexity (HC) features are replaced by a feature extractor based on convolutional neural network (CNN). Description of the model and the validation study has been published in ACM Multimedia 2020 (link to the paper [here https://dl.acm.org/doi/10.1145/3394171.3413845]).
+CNN-TLVQM is an improved version of Two-Level Video Quality Model (TLVQM) (https://github.com/jarikorhonen/nr-vqa-consumervideo), where the spatial high complexity (HC) features are replaced by a feature extractor based on convolutional neural network (CNN). Description of the model and the validation study has been published in ACM Multimedia 2020 (link to the paper [here](https://dl.acm.org/doi/10.1145/3394171.3413845))).
 
 For reproducing the model and the results for KoNViD-1k and LIVE-VQC datasets, you need to first download the required third-party databases: 
 
 LIVE Challenge image quality database from: http://live.ece.utexas.edu/research/ChallengeDB/
-KoNVid-1k video quality database from: http://database.mmsp-kn.de/konvid-1k-database.html
-LIVE-VQC video quality database from:
 
-The model is implemented in Matlab (we have used version R2018b), including Image Processing Toolbox and Deep Learning Toolbox.
+KoNViD-1k video quality database from: http://database.mmsp-kn.de/konvid-1k-database.html
 
-There are four steps in the workflow for using the model: 
+LIVE-VQC video quality database from: https://live.ece.utexas.edu/research/LIVEVQC/index.html
+
+The model is implemented in Matlab (we have used version R2018b), including Image Processing Toolbox and Deep Learning Toolbox. In addition, for training the CNN model from scratch, pre-trained ResNet50 is needed, and for using GPU, Parallel Processing Toolbox is needed. These can be downloaded and installed using Matlab standard add-on tool.
+
+For reproducing the results in ACM MM paper, you can use the script masterScript as:
+
+'''
+masterScript('c:\\live_challenge', 'c:\\konvid', 'c:\\live-vqc', 'gpu');
+'''
+
+In the example above, it is assumed that the LIVE Challenge, KoNViD-1k, and LIVE-VQC have been installed in directories c:\live_challenge, c:\konvid, and c:\live-vqc, respectively. The fourth parameter can be set to either 'cpu' or 'gpu', and defines whether CPU or GPU is used for training and testing the CNN model.
+
+The script goes automatically through the following four steps in the workflow: 
 
 ### 1) Creating training images for CNN
 
@@ -20,51 +30,44 @@ In Matlab, the training data (224x224 patches) can be created by using:
 ```
 >> processLiveChallenge(path, out_path);
 ```
-where path is the path to the LIVE Challenge database (e.g. 'c:\\LiveChallenge') and out_path is the path to the produced training images (e.g. 'c:\\Training_Images'). The script will produce training images and their respective probabilistic quality scores and store them in Matlab data file 'LiveC_prob.mat' in the current path.
+where _path_ is the path to the LIVE Challenge database (e.g. 'c:\\live_challenge') and _out_path_ is the path to the produced training patches (e.g. '.\\training_patches'). The script will produce training images and their respective probabilistic quality scores and store them in Matlab data file 'LiveC_prob.mat' in the current path.
 
 
 ### 2) Training the CNN model by using the created training images 
 
-In Matlab, use:
+For training the CNN feature extractor, use:
 ```
->> trainCNNmodel(path, model_file);
+>> trainCNNmodel(path,cnnfile, cpugpu);
 ```
-where path is the path to the training images (e.g. 'c:\\Training_Images'), and model_file is the file where the model will be saved (e.g. c:\\CNN_model.mat').
-
-Note that in Matlab 2018b, for freezeWeights and createLgraphUsingConnections, you may need to first add matlabroot\examples\nnet\ in the path, by using:
-```  
->> addpath([matlabroot,'\\examples\\nnet\\main']);
-```
+where _path_ is the path to the training patches (e.g. '.\\training_patches'), _cnnfile_ is the file where the model will be saved (e.g. 'CNN_model.mat'), and _cpugpu_ is either 'cpu' or 'gpu'.
 
 You can also download pre-trained model for Matlab [here](https://mega.nz/file/Tdxi1IAQ#_G6y6UXcOdjPsWaVhVULPcqwMNmh0YW26Jhg-pcC6aY).
 
-### 3) Extracting the sequences of features from KoNViD-1k video sequences 
+### 3) Extracting the video features from KoNViD-1k and LIVE-VQC databases 
 
-First, you need to obtain KoNVid-1k from: http://database.mmsp-kn.de/konvid-1k-database.html. Note that the video files in the database are distributed as compressed MP4 files, and you need to decompress them to YUV4:2:0 format (\*.yuv files) before extracting the features. You can use e.g. ffmpeg (http://ffmpeg.org) for decoding.
-
-Then, you can use Matlab script:
+For extracting KoNViD-1k features, use:
 ```
->>  computeFeaturesForKonvid1k.m 
+>>  computeFeaturesForKoNViD1k(konvid_path, konvid_feature_file, cnnfile, cpugpu);
 ```
-Note that you need to change the file names and paths in the script as follows:
+where _konvid_path_ is the path to KoNViD-1k dataset (e.g. 'c:\\konvid'), _konvid_feature_file_ defines the Matlab data file where the features will be saved (e.g. '.\\konvid_features.mat'), _cnnfile_ is the file for the CNN model (e.g. 'CNN_model.mat'), and _cpugpu_ is either 'cpu' or 'gpu'. Note that KoNViD-1k metadata file _KoNViD_1k_attributes.csv_ must be in the database folder.
 
-**konvid_path:** path to the KoNViD-1k database (e.g. 'c:\\KoNViD-1k').
-
-**konvid_mos_file:** the file with pre-processed KoNViD-1k MOS values and frame rates, included in this zip file (by default, '.\\konvid_mos_fr.csv').
-
-**cnn_model_file:** the file for the CNN model trained in step 2 (e.g. 'c:\\CNN_model.mat').
-
-**feature_file:** path to the folder where the resulting feature file is saved (e.g. 'c:\\KoNViD-1k\\KoNViD_features.mat'). The script will save the features in Matlab data file 'KONVID_features.mat'.
-
+For extracting KoNViD-1k features, use:
+```
+>>  computeFeaturesForLIVEVQC(livevqc_path, livevqc_feature_file, cnnfile, cpugpu);
+```
+where _livevqc_path_ is the path to KoNViD-1k dataset (e.g. 'c:\\live-vqc'), _livevqc_feature_file_ defines the Matlab data file where the features will be saved (e.g. '.\\livevqc_features.mat'), _cnnfile_ is the file for the CNN model (e.g. 'CNN_model.mat'), and _cpugpu_ is either 'cpu' or 'gpu'.
 
 ### 4) Training and testing the regression models 
 
-There are two scripts for this purpose, for SVR and LSTM, respectively. They can be used as:
+There are two scripts for training and testing the regression model with 100 random splits by using for SVR and LSTM, respectively. They can be used as:
 ```
->> predictMOSwithLSTM.m
->> predictMOSwithSVR.m
+>> results = predictMOSwithSVR_100splits(features, mos);
+>> results = predictMOSwithLSTM_100splits(features, mos);
 ```
-You need to change the following filenames in the scripts:
+where _features_ contains the features for each video, as computed in the previous step, and _mos_ contains the MOS values for each video, respectively. As output, the function gives a matrix of size (100,3), where the columns represent the Pearson Linear Correlation Coefficient (PCC), Spearman Rank-order Correlation Coefficient (SCC) and Root Mean Squared Error (RMSE) for each test split. Note that RMSE has been computed for MOS values normalized to interval 0-1.  
 
-feature_file: the file where the features are saved (e.g. 'c:\\KoNViD-1k\\KONVID_features.mat').
-result_file: the file where to save the results (e.g. 'c:\\KoNViD-1k\\KONVID_results_LSTM.csv' or 'c:\\KoNViD-1k\\KONVID_results_SVR.csv').
+For cross-database test, use:
+```
+>> results = predictMOSwithSVR_CrossDB(features_train, mos_train, features_test, mos_test);
+```
+where features_train contains the features for the training dataset, mos_train contains the respective MOS values, and fetures_test and mos_test contain the features and MOS values for the testing dataset, respectively. As a result, the function returns a vector with PCC, SCC, and RMSE.
