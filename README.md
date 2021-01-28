@@ -18,7 +18,7 @@ For reproducing the results in ACM MM paper, you can use the script `masterScrip
 >> masterScript('c:\\live_challenge', 'c:\\konvid', 'c:\\live-vqc', 'gpu');
 ```
 
-In the example above, it is assumed that the LIVE Challenge, KoNViD-1k, and LIVE-VQC have been installed in directories _c:\live_challenge_, _c:\konvid_, and _c:\live-vqc_, respectively. The fourth parameter can be set to either `'cpu'` or `'gpu'`, and defines whether CPU or GPU is used for training and testing the CNN model. The script writes the results in CSV file `results.csv` in the current directory.
+In the example above, it is assumed that the LIVE Challenge, KoNViD-1k, and LIVE-VQC have been installed in directories _c:\live_challenge_, _c:\konvid_, and _c:\live-vqc_, respectively. The fourth parameter can be set to either `'cpu'` or `'gpu'`, and defines whether CPU or GPU is used for training and testing the CNN model. The script writes the results in CSV file _results.csv_ in the current directory.
 
 The script goes automatically through the following steps in the workflow: 
 
