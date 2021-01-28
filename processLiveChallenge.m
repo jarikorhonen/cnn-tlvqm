@@ -1,8 +1,6 @@
 % --------------------------------------------------------------
 %   processLiveChallenge.m
 %
-%   Written by Jari Korhonen, Shenzhen University
-%
 %   This function processes LIVE Image Quality Challenge
 %   database to produce the training images and obtain the
 %   approximated probabilistic representations for the quality
@@ -10,11 +8,10 @@
 %
 %   Usage: processLiveChallenge(path)
 %   Inputs: 
-%       path: string with the path to LIVE Challenge database
+%       path:     Path to LIVE Challenge database
+%       out_path: Path to the location of training patches
 %   Outuput: dummy
 %
-%   Note that you need to change the paths in this file to the 
-%   actual folder where the database is located.
 %   
 
 function res = processLiveChallenge(path, out_path)
@@ -38,15 +35,25 @@ function res = processLiveChallenge(path, out_path)
 
     % Save the results
     LiveC_prob = bins;
-    save([out_path '\\LiveC_prob.mat'],'LiveC_prob');
+    save('.\\LiveC_prob.mat','LiveC_prob');
 
     % Load image names in Live Challenge database
     load([path '\\data\\allImages_release.mat']);
     patch_size = [224 224];
+    indicator_text = ''; %sprintf('Processing image %d/%d', ...
+                          %   0,length(AllImages_release));
+    %fprintf(indicator_text);
+    len_ind = length(indicator_text);
 
     % Loop through all the test images (skip the first seven for training
     for im_no=8:length(AllImages_release)
 
+        fprintf(repmat(char(8), 1, length(indicator_text)));
+        indicator_text = sprintf('Processing image %d/%d', ...
+                                 im_no-7,length(AllImages_release));
+        fprintf(indicator_text);
+        %len_ind = length(indicator_text);
+        
         imfile = sprintf('%s\\Images\\%s', path, AllImages_release{im_no});
         
         % Initialize variables
@@ -82,6 +89,8 @@ function res = processLiveChallenge(path, out_path)
             end
         end 
     end
+    fprintf(repmat(char(8), ind_len));
+    fprintf('Ready!\n');
     res = 0;   
 end
 
