@@ -70,4 +70,4 @@ For cross-database test, use:
 ```
 >> results = predictMOSwithSVR_CrossDB(features_train, mos_train, features_test, mos_test);
 ```
-where features_train contains the features for the training dataset, mos_train contains the respective MOS values, and fetures_test and mos_test contain the features and MOS values for the testing dataset, respectively. As a result, the function returns a vector with PCC, SCC, and RMSE.
+where _features_train_ contains the features for the training dataset, _mos_train_ contains the respective MOS values, and _fetures_test_ and _mos_test_ contain the features and MOS values for the testing dataset, respectively. As a result, the function returns a vector with PCC, SCC, and RMSE. Usage example can be found in `masterScript`.
