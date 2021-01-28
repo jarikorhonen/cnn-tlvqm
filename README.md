@@ -37,7 +37,7 @@ where _path_ is the path to the LIVE Challenge database (e.g. 'c:\\live_challeng
 
 For training the CNN feature extractor, use:
 ```
->> trainCNNmodel(path,cnnfile, cpugpu);
+>> trainCNNmodel(path, cnnfile, cpugpu);
 ```
 where _path_ is the path to the training patches (e.g. '.\\training_patches'), _cnnfile_ is the file where the model will be saved (e.g. 'CNN_model.mat'), and _cpugpu_ is either 'cpu' or 'gpu'.
 
@@ -51,11 +51,11 @@ For extracting KoNViD-1k features, use:
 ```
 where _konvid_path_ is the path to KoNViD-1k dataset (e.g. 'c:\\konvid'), _konvid_feature_file_ defines the Matlab data file where the features will be saved (e.g. '.\\konvid_features.mat'), _cnnfile_ is the file for the CNN model (e.g. 'CNN_model.mat'), and _cpugpu_ is either 'cpu' or 'gpu'. Note that KoNViD-1k metadata file _KoNViD_1k_attributes.csv_ must be in the database folder.
 
-For extracting KoNViD-1k features, use:
+For extracting LIVE-VQC features, use:
 ```
 >>  computeFeaturesForLIVEVQC(livevqc_path, livevqc_feature_file, cnnfile, cpugpu);
 ```
-where _livevqc_path_ is the path to KoNViD-1k dataset (e.g. 'c:\\live-vqc'), _livevqc_feature_file_ defines the Matlab data file where the features will be saved (e.g. '.\\livevqc_features.mat'), _cnnfile_ is the file for the CNN model (e.g. 'CNN_model.mat'), and _cpugpu_ is either 'cpu' or 'gpu'.
+where _livevqc_path_ is the path to LIVE-VQC dataset (e.g. 'c:\\live-vqc'), _livevqc_feature_file_ defines the Matlab data file where the features will be saved (e.g. '.\\livevqc_features.mat'), _cnnfile_ is the file for the CNN model (e.g. 'CNN_model.mat'), and _cpugpu_ is either 'cpu' or 'gpu'.
 
 ### 4) Training and testing the regression models 
 
