@@ -1,6 +1,6 @@
 # CNN-TLVQM
 
-CNN-TLVQM is an improved version of Two-Level Video Quality Model (TLVQM) (https://github.com/jarikorhonen/nr-vqa-consumervideo), where the spatial high complexity (HC) features are replaced by a feature extractor based on convolutional neural network (CNN). Description of the model and the validation study has been published in ACM Multimedia 2020 (link to the paper [here](https://dl.acm.org/doi/10.1145/3394171.3413845)).
+CNN-TLVQM is an improved version of [Two-Level Video Quality Model (TLVQM)](https://github.com/jarikorhonen/nr-vqa-consumervideo), where the spatial high complexity (HC) features are replaced by a feature extractor based on convolutional neural network (CNN). Description of the model and the validation study has been published in ACM Multimedia 2020 (link to the paper [here](https://dl.acm.org/doi/10.1145/3394171.3413845)).
 
 For reproducing the model and the results for KoNViD-1k and LIVE-VQC datasets, you need to first download the required third-party databases: 
 
@@ -12,13 +12,13 @@ LIVE-VQC video quality database from: https://live.ece.utexas.edu/research/LIVEV
 
 The model is implemented in Matlab (we have used version R2018b), including Image Processing Toolbox and Deep Learning Toolbox. In addition, for training the CNN model from scratch, pre-trained ResNet50 is needed, and for using GPU, Parallel Processing Toolbox is needed. These can be downloaded and installed using Matlab standard add-on tool.
 
-For reproducing the results in ACM MM paper, you can use the script masterScript as:
+For reproducing the results in ACM MM paper, you can use the script `masterScript` as:
 
 ```
-masterScript('c:\\live_challenge', 'c:\\konvid', 'c:\\live-vqc', 'gpu');
+>> masterScript('c:\\live_challenge', 'c:\\konvid', 'c:\\live-vqc', 'gpu');
 ```
 
-In the example above, it is assumed that the LIVE Challenge, KoNViD-1k, and LIVE-VQC have been installed in directories c:\live_challenge, c:\konvid, and c:\live-vqc, respectively. The fourth parameter can be set to either 'cpu' or 'gpu', and defines whether CPU or GPU is used for training and testing the CNN model.
+In the example above, it is assumed that the LIVE Challenge, KoNViD-1k, and LIVE-VQC have been installed in directories `c:\live_challenge`, `c:\konvid`, and `c:\live-vqc`, respectively. The fourth parameter can be set to either `'cpu'` or `'gpu'`, and defines whether CPU or GPU is used for training and testing the CNN model.
 
 The script goes automatically through the following four steps in the workflow: 
 
