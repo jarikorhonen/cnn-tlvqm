@@ -12,7 +12,7 @@ LIVE-VQC video quality database from: https://live.ece.utexas.edu/research/LIVEV
 
 The model is implemented in Matlab (we have used version R2018b), including Image Processing Toolbox and Deep Learning Toolbox. In addition, for training the CNN model from scratch, pre-trained ResNet50 is needed, and for using GPU, Parallel Processing Toolbox is needed. These can be downloaded and installed using Matlab standard add-on tool.
 
-For reproducing the results in ACM MM paper, you can use the script `masterScript` as:
+For reproducing the results in ACM MM paper, you can use the script `masterScript(livec_path, konvid_path, livevqc_path, cpugpu)` as:
 
 ```
 >> masterScript('c:\\live_challenge', 'c:\\konvid', 'c:\\live-vqc', 'gpu');
