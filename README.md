@@ -1,8 +1,12 @@
 # CNN-TLVQM
 
-CNN-TLVQM is an improved version of Two-Level Video Quality Model (TLVQM) (https://github.com/jarikorhonen/nr-vqa-consumervideo), where the spatial high complexity (HC) features are replaced by a feature extractor based on convolutional neural network (CNN). The results we have obtained with the model, compared to some well known benchmarks, are shown in the Tables below.
+CNN-TLVQM is an improved version of Two-Level Video Quality Model (TLVQM) (https://github.com/jarikorhonen/nr-vqa-consumervideo), where the spatial high complexity (HC) features are replaced by a feature extractor based on convolutional neural network (CNN). Description of the model and the validation study has been published in ACM Multimedia 2020 (link to the paper [here https://dl.acm.org/doi/10.1145/3394171.3413845]).
 
-The instructions for reproducing the model and the results for KoNViD-1k dataset using CNN-TLVQM video quality model are given below.
+For reproducing the model and the results for KoNViD-1k and LIVE-VQC datasets, you need to first download the required third-party databases: 
+
+LIVE Challenge image quality database from: http://live.ece.utexas.edu/research/ChallengeDB/
+KoNVid-1k video quality database from: http://database.mmsp-kn.de/konvid-1k-database.html
+LIVE-VQC video quality database from:
 
 The model is implemented in Matlab (we have used version R2018b), including Image Processing Toolbox and Deep Learning Toolbox.
 
@@ -10,7 +14,7 @@ There are four steps in the workflow for using the model:
 
 ### 1) Creating training images for CNN
 
-Training images (patches) are created from LIVE in the Wild Image Quality Challenge Database (LIVE Challenge) to train the 2D-CNN model. LIVE Challenge database can be obtained from: http://live.ece.utexas.edu/research/ChallengeDB/.
+Training images (patches) are created from LIVE in the Wild Image Quality Challenge Database (LIVE Challenge) to train the 2D-CNN model. 
 
 In Matlab, the training data (224x224 patches) can be created by using:
 ```
