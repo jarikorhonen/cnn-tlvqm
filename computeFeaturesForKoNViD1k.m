@@ -2,37 +2,53 @@
 % Example of how to use computeCNNTLVQMfeatures
 % Compute features for all the videos in KoNViD-1k
 %
-%  Written by Jari Korhonen, Shenzhen University
-%
 
-konvid_path = '.\\KoNViD\\';
-konvid_mos_file = '.\\KoNViD_mos_fr.csv';
-cnn_model_file = '.\\CNN_model.mat';
-feature_file = '.\\KoNViD_features.mat';
+function features = computeFeaturesForKoNViD1k(konvid_path, ...
+                                               konvid_feature_file, ...
+                                               cnnfile, ...
+                                               cpugpu)
+    
+    % Load CNN feature extractor 
+    if not(isfile(cnnfile))
+        fprintf('CNN feature extractor not found!\n');
+        features = [];
+        return;
+    end
+    load(cnnfile,'netTransfer');                                       
+                                           
+    % Read metadata for KoNViD-1k
+    konvid_metadata_file = 'KoNViD_1k_attributes.csv';
+    if not(isfile([konvid_path '\\' konvid_metadata_file]))
+        fprintf('KoNViD-1k metadata file not found!\n');
+        fprintf('Make sure %s is in %s.\n', konvid_metadata_file, ...
+                                            konvid_path);
+        fprintf('KoNViD-1k features not extracted.\n');
+        features = [];
+        return;
+    end
+    [data,datatxt] = xlsread([konvid_path '\\' konvid_metadata_file]);
+    file_id = datatxt(2:end,3);
+    mos = (data(:,4)-1)./4;
 
-% Read subjective data from a pre-made data file
-data = csvread(konvid_mos_file);
-[~,idx] = sort(data(:,1));
-data = data(idx,:);
-file_id = data(:,1);
-mos = data(:,2);
-frates = data(:,3);
+    % Loop through all the files to compute features
+    features={};
+    indicator_text = '';
+    for i=1:length(file_id)
 
-% Load the pretrained CNN model for spatial features
-load(cnn_model_file);
+        video_path = [konvid_path '\\' file_id{i}];
+        fprintf(repmat(char(8), 1, length(indicator_text)));
+        indicator_text = sprintf('Computing features for file %d/%d\n', ...
+                                 i, length(file_id));
+        fprintf(indicator_text);
 
-% Loop through all the files to compute features
-features={};
-for i=1:length(file_id)
-
-    yuv_path = sprintf('%s%d_*.yuv', konvid_path, file_id(i));
-    yuv_files = dir(yuv_path);
-
-    % Compute features for each video file
-    fprintf('Computing features for sequence: %s\n',yuv_files.name);
-    tic
-    features{i} = computeCNNTLVQMfeatures([konvid_path yuv_files.name], [960 540], 30, netTransfer);
-    toc
+        % Compute features
+        features{i} = computeCNNTLVQMfeatures(video_path, netTransfer, ...
+                                              cpugpu);
+        if isempty(features)
+            fprintf('\nFailed extracting features.\n');
+            return;
+        end
+    end
+    save(konvid_feature_file,'features','mos','-v7.3');
+    fprintf('All done!\n');
 end
-save(feature_file,'features','mos','-v7.3');
-fprintf('All done!\n');
