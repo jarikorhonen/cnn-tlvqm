@@ -14,9 +14,9 @@ The model is implemented in Matlab (we have used version R2018b), including Imag
 
 For reproducing the results in ACM MM paper, you can use the script masterScript as:
 
-'''
+```
 masterScript('c:\\live_challenge', 'c:\\konvid', 'c:\\live-vqc', 'gpu');
-'''
+```
 
 In the example above, it is assumed that the LIVE Challenge, KoNViD-1k, and LIVE-VQC have been installed in directories c:\live_challenge, c:\konvid, and c:\live-vqc, respectively. The fourth parameter can be set to either 'cpu' or 'gpu', and defines whether CPU or GPU is used for training and testing the CNN model.
 
