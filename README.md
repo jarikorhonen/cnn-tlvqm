@@ -30,7 +30,7 @@ In Matlab, the training data (224x224 patches) can be created by using:
 ```
 >> processLiveChallenge(path, out_path);
 ```
-where _path_ is the path to the LIVE Challenge database (e.g. `'c:\\live_challenge'`) and _out_path_ is the path to the produced training patches (e.g. `'.\\training_patches'`). The script will produce training images and their respective probabilistic quality scores and store them in Matlab data file `'LiveC_prob.mat'` in the current path.
+where _path_ is the path to the LIVE Challenge database (e.g. `'c:\\live_challenge'`) and _out_path_ is the path to the produced training patches (e.g. `'.\\training_patches'`). The script will produce training images and their respective probabilistic quality scores and store them in Matlab data file _LiveC_prob.mat_ in the current path.
 
 
 ### 2) Training the CNN model by using the created training images 
@@ -49,7 +49,7 @@ For extracting KoNViD-1k features, use:
 ```
 >>  computeFeaturesForKoNViD1k(konvid_path, konvid_feature_file, cnnfile, cpugpu);
 ```
-where _konvid_path_ is the path to KoNViD-1k dataset (e.g. `'c:\\konvid'`), _konvid_feature_file_ defines the Matlab data file where the features will be saved (e.g. `'.\\konvid_features.mat'`), _cnnfile_ is the file for the CNN model (e.g. `'CNN_model.mat'`), and _cpugpu_ is either `'cpu'` or `'gpu'`. Note that KoNViD-1k metadata file `KoNViD_1k_attributes.csv` must be in the database folder.
+where _konvid_path_ is the path to KoNViD-1k dataset (e.g. `'c:\\konvid'`), _konvid_feature_file_ defines the Matlab data file where the features will be saved (e.g. `'.\\konvid_features.mat'`), _cnnfile_ is the file for the CNN model (e.g. `'CNN_model.mat'`), and _cpugpu_ is either `'cpu'` or `'gpu'`. Note that KoNViD-1k metadata file _KoNViD_1k_attributes.csv_ must be in the database folder.
 
 For extracting LIVE-VQC features, use:
 ```
