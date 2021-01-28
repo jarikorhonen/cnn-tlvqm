@@ -1,23 +1,26 @@
 % --------------------------------------------------------------
 %   trainCNNmodel.m
 %
-%   Written by Jari Korhonen, Shenzhen University
-%
 %   This function trains the CNN model to be used as local
 %   feature extractor.
 %
-%   Usage: trainCNNmodel(path,modelpath)
+%   Changes: weight initialization defined explicitely to
+%   ensure backwards compatibility with other Matlab versions.
+%   Tested with R2018b and R2020a.
+%
 %   Inputs: 
-%       path: string with the path to the training images and
-%             file LiveC_prob.mat with the probabilistic scores
-%       modelpath: string to the path where to save the obtained
-%             CNN model
+%       path:       Path to the training patches
+%       model_file: Name of the file where to save the obtained
+%                   CNN model
+%       cpugpu:     For using CPU, set to 'cpu', and for using 
+%                   GPU, set to 'gpu'
+%
 %   Output: dummy
 %   
-function res = trainCNNmodel(path, model_file)
+function res = trainCNNmodel(path, model_file, cpugpu)
 
     % Load probabilistic representations for quality scores
-    load([path '\\LiveC_prob.mat'],'LiveC_prob');
+    load('.\\LiveC_prob.mat','LiveC_prob');
 
     % Loop through all the test images to obtain source paths
     % for test images and the respective ground truth outputs
@@ -37,10 +40,10 @@ function res = trainCNNmodel(path, model_file)
     net = resnet50; 
 
     % Modify the model for quality prediction
-    newLayer1 = fullyConnectedLayer(128,'WeightLearnRateFactor',2,'BiasLearnRateFactor',2,'Name','feature_layer1');
+    newLayer1 = fullyConnectedLayer(128,'WeightLearnRateFactor',2,'BiasLearnRateFactor',2,'Name','feature_layer1','WeightsInitializer','narrow-normal');
     newLayer2 = reluLayer('Name','ReLU_128');
     newLayer3 = dropoutLayer('Name','dropout_128');
-    newLayer4 = fullyConnectedLayer(5,'WeightLearnRateFactor',2,'BiasLearnRateFactor',2,'Name','fc_output');
+    newLayer4 = fullyConnectedLayer(5,'WeightLearnRateFactor',2,'BiasLearnRateFactor',2,'Name','fc_output','WeightsInitializer','narrow-normal');
     newLayer5 = huberRegressionLayer('huber_regression');
     lgraph = layerGraph(net);
     lgraph = replaceLayer(lgraph,'fc1000',newLayer1);
@@ -59,12 +62,12 @@ function res = trainCNNmodel(path, model_file)
 
     % Define training options
     options = trainingOptions('sgdm', ...
-        'MiniBatchSize',32, ...
+        'MiniBatchSize',32, ...        
         'MaxEpochs',2, ...
         'L2Regularization',0.01, ...
         'InitialLearnRate',0.0005, ...
         'Shuffle','every-epoch', ...
-        'ExecutionEnvironment','gpu', ...
+        'ExecutionEnvironment',cpugpu, ...
         'Verbose',false, ...
         'Plots','training-progress');
 
