@@ -1,10 +1,9 @@
 %--------------------------------------------------------------
 %
-%   Example of using LSTM regression to predict KoNViD-1k MOS
+%   Example of using SVR regression to predict cross-dataset MOS
 % 
-%   Runs 100 times with different random splits to training
-%   and test sets, stores result to file and displays average 
-%   result
+%   Trains with training features and MOS and tests with testing
+%   features and MOS given as parameter. Returns PCC, SRCC and RMSE.
 %
 
 function results = predictMOSwithSVR_CrossDB(features_train, mos_train, ...
