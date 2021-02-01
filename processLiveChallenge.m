@@ -50,7 +50,7 @@ function res = processLiveChallenge(path, out_path)
 
         fprintf(repmat(char(8), 1, length(indicator_text)));
         indicator_text = sprintf('Processing image %d/%d', ...
-                                 im_no-7,length(AllImages_release));
+                                 im_no-7,length(AllImages_release)-7);
         fprintf(indicator_text);
         %len_ind = length(indicator_text);
         
