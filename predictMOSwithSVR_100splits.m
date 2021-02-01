@@ -1,10 +1,10 @@
 %--------------------------------------------------------------
 %
-%   Example of using LSTM regression to predict KoNViD-1k MOS
+%   Example of using SVR regression to predict MOS
 % 
 %   Runs 100 times with different random splits to training
-%   and test sets, stores result to file and displays average 
-%   result
+%   and test sets, returns the results for each split in
+%   terms of PCC, SCC and RMSE
 %
 
 function results = predictMOSwithSVR_100splits(features, mos)
@@ -17,6 +17,7 @@ end
 results = [];
 new_result = [0 0 0];
 indicator_text = '';
+
 
 % Compute results for 100 random splits
 for i=1:100
@@ -64,9 +65,9 @@ end
 fprintf(repmat(char(8), 1, length(indicator_text)));
 means = mean(results);
 stds = std(results);
-fprintf('Ready! Total results: \n');
-fprintf('PCC %2.3f (%1.3f) SCC %2.3f (%1.3f) RMSE %0.4f (%0.4f)\n', ...
-         means(1),stds(1),means(2),stds(2),means(3),stds(3));
+% fprintf('Ready! Total results: \n');
+% fprintf('PCC %2.3f (%1.3f) SCC %2.3f (%1.3f) RMSE %0.4f (%0.4f)\n', ...
+%          means(1),stds(1),means(2),stds(2),means(3),stds(3));
 end
 
 % EOF
