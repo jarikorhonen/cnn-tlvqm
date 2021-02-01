@@ -157,9 +157,7 @@ if compute_features
                               cnn_model_file, cpugpu);
 end
 
-% 
-% out = 1;
-% return;
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Phase 4: training and testing the video quality model
@@ -192,10 +190,11 @@ else
     results = predictMOSwithSVR_100splits(features, mos);
     means = mean(results);
     stds = std(results);
-    
+    fprintf('Results: PCC %2.3f, SCC (%1.3f), RMSE %2.2f (%2.2f)\n', means(2), stds(2), ...
+                                                 means(3)*100, stds(3)*100);      
     fprintf(f, 'Model, PCC (stdev), SCC (stdev), RMSE (stdev)\n');
     fprintf(f, 'CNN (SVR), %2.3f (%1.3f), ', means(1), stds(1));
-    fprintf(f, '%2.3f (%1.3f), %0.4f (%0.4f)\n', means(2), stds(2), ...
+    fprintf(f, '%2.3f (%1.3f), %0.3f (%0.3f)\n', means(2), stds(2), ...
                                                  means(3)*4, stds(3)*4);
 end
 
@@ -210,9 +209,10 @@ else
     results = predictMOSwithSVR_100splits(features, mos);
     means = mean(results);
     stds = std(results);
-    
+    fprintf('Results: PCC %2.3f, SCC (%1.3f), RMSE %2.2f (%2.2f)\n', means(2), stds(2), ...
+                                                 means(3)*100, stds(3)*100);      
     fprintf(f, 'CNN-TLVQM (SVR), %2.3f (%1.3f), ', means(1), stds(1));
-    fprintf(f, '%2.3f (%1.3f), %0.4f (%0.4f)\n', means(2), stds(2), ...
+    fprintf(f, '%2.3f (%1.3f), %0.3f (%0.3f)\n', means(2), stds(2), ...
                                                  means(3)*4, stds(3)*4);
 end
 
@@ -227,9 +227,10 @@ else
     results = predictMOSwithLSTM_100splits(features, mos);
     means = mean(results);
     stds = std(results);   
-    
+    fprintf('Results: PCC %2.3f, SCC (%1.3f), RMSE %2.2f (%2.2f)\n', means(2), stds(2), ...
+                                                 means(3)*100, stds(3)*100);      
     fprintf(f, 'CNN-TLVQM (LSTM), %2.3f (%1.3f), ', means(1), stds(1));
-    fprintf(f, '%2.3f (%1.3f), %0.4f (%0.4f)\n', means(2), stds(2), ...
+    fprintf(f, '%2.3f (%1.3f), %0.3f (%0.3f)\n', means(2), stds(2), ...
                                                  means(3)*4, stds(3)*4);
 end
 
@@ -248,17 +249,17 @@ else
     results = predictMOSwithSVR_100splits(features, mos);
     means = mean(results);
     stds = std(results);
-    
+    fprintf('Results: PCC %2.3f, SCC (%1.3f), RMSE %2.2f (%2.2f)\n', means(2), stds(2), ...
+                                                 means(3)*100, stds(3)*100);      
     fprintf(f, 'Model, PCC (stdev), SCC (stdev), RMSE (stdev)\n');
     fprintf(f, 'CNN (SVR), %2.3f (%1.3f), ', means(1), stds(1));
-    fprintf(f, '%2.3f (%1.3f), %0.4f (%0.4f)\n', means(2), stds(2), ...
+    fprintf(f, '%2.3f (%1.3f), %2.2f (%2.2f)\n', means(2), stds(2), ...
                                                  means(3)*100, stds(3)*100);
 end
 
 %-----------------------------------------------------------
 % Test CNN-TLVQM on LIVE-VQC with SVR, 100 random splits
 %
-fprintf(f, 'Testing on LIVE-VQC (100 splits)\n');
 if not(isfile(livevqc_feature_file))
     fprintf('LIVE-VQC feature file not found!\n');
 else
@@ -267,7 +268,8 @@ else
     results = predictMOSwithSVR_100splits(features, mos);
     means = mean(results);
     stds = std(results);
-    
+    fprintf('Results: PCC %2.3f, SCC (%1.3f), RMSE %2.2f (%2.2f)\n', means(2), stds(2), ...
+                                                 means(3)*100, stds(3)*100);      
     fprintf(f, 'CNN-TLVQM (SVR), %2.3f (%1.3f), ', means(1), stds(1));
     fprintf(f, '%2.3f (%1.3f), %2.2f (%2.2f)\n', means(2), stds(2), ...
                                                  means(3)*100, stds(3)*100);
@@ -284,7 +286,8 @@ else
     results = predictMOSwithLSTM_100splits(features, mos);
     means = mean(results);
     stds = std(results);
-    
+    fprintf('Results: PCC %2.3f, SCC (%1.3f), RMSE %2.2f (%2.2f)\n', means(2), stds(2), ...
+                                                 means(3)*100, stds(3)*100);    
     fprintf(f, 'CNN-TLVQM (LSTM), %2.3f (%1.3f), ', means(1), stds(1));
     fprintf(f, '%2.3f (%1.3f), %2.2f (%2.2f)\n', means(2), stds(2), ...
                                                  means(3)*100, stds(3)*100);
@@ -317,7 +320,7 @@ else
     fprintf('PCC %2.3f, SCC %2.3f, RMSE %2.2f\n', ...
              results(1),results(2),results(3)*100);
     fprintf(f, 'Model, PCC, SCC, RMSE\n');
-    fprintf(f, 'CNN (SVR), %2.3f, %2.2f, %2.2\n', ...
+    fprintf(f, 'CNN (SVR), %2.3f, %2.2f, %2.2f\n', ...
              results(1),results(2),results(3)*100);
 end
 
@@ -340,7 +343,7 @@ else
     fprintf('Results: ');
     fprintf('PCC %2.3f, SCC %2.3f, RMSE %2.2f\n', ...
              results(1),results(2),results(3)*100);
-    fprintf(f, 'CNN (SVR), %2.3f, %2.2f, %2.2\n', ...
+    fprintf(f, 'CNN-TLVQM (SVR), %2.3f, %2.2f, %2.2f\n', ...
              results(1),results(2),results(3)*100);
 end
 
@@ -372,7 +375,7 @@ else
              results(1),results(2),results(3)*4);
          
     fprintf(f, 'Model, PCC, SCC, RMSE\n');
-    fprintf(f, 'CNN (SVR), %2.3f, %2.3f, %2.2\n', ...
+    fprintf(f, 'CNN (SVR), %2.3f, %2.3f, %2.2f\n', ...
              results(1),results(2),results(3)*4);
 end
 
@@ -395,9 +398,11 @@ else
     fprintf('Results: ');
     fprintf('PCC %2.3f, SCC %2.3f, RMSE %2.2f\n', ...
              results(1),results(2),results(3)*4);
-    fprintf(f, 'CNN (SVR), %2.3f, %2.3f, %2.2\n', ...
+    fprintf(f, 'CNN-TLVQM (SVR), %2.3f, %2.3f, %2.2f\n', ...
              results(1),results(2),results(3)*4);
 end
+
+fclose(f);
 
 out = 0;
 end
