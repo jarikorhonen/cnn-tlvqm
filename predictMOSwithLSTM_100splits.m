@@ -44,13 +44,10 @@ for i=1:100
     % Define LSTM network
     numResponses = 1;
     numFeatures = size(XTrain{1},1);
-    layers = [ sequenceInputLayer(numFeatures,'Normalization','zerocenter',...
-                                  'NormalizationDimension','element')               
-               lstmLayer(512,'OutputMode','last',...
-                         'InputWeightsInitializer','narrow-normal',...
-                         'RecurrentWeightsInitializer','narrow-normal') 
-               fullyConnectedLayer(numResponses,...
-                                   'WeightsInitializer','narrow-normal')
+    layers = [ sequenceInputLayer(numFeatures,'Normalization','zerocenter')               
+               lstmLayer(512,'OutputMode','last') 
+               reluLayer
+               fullyConnectedLayer(numResponses,'WeightsInitializer','narrow-normal')
                huberRegressionLayer('reg')];
 
     % Define learning parameters
