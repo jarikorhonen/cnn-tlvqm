@@ -20,7 +20,7 @@
 function res = trainCNNmodel(path, model_file, cpugpu)
 
     % Load probabilistic representations for quality scores
-    load('.\\LiveC_prob.mat','LiveC_prob');
+    load(['.' filesep 'LiveC_prob.mat'],'LiveC_prob');
 
     % Loop through all the test images to obtain source paths
     % for test images and the respective ground truth outputs
@@ -28,7 +28,7 @@ function res = trainCNNmodel(path, model_file, cpugpu)
     outputs = [];
     for i=1:length(LiveC_prob(:,1))
         for j=1:36
-            filenames = [filenames; sprintf('%s\\%04d_%02d.png',path,i,j)];
+            filenames = [filenames; sprintf('%s%s%04d_%02d.png',path,filesep,i,j)];
             outputs = [outputs; LiveC_prob(i,:)];
         end
     end
