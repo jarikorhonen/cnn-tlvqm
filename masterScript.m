@@ -7,13 +7,13 @@
 %
 %  inputs: 
 %          livec_path: path to the LIVE Challenge image quality  
-%          database (e.g. 'd:\\live_challenge')
+%          database (e.g. 'd:/live_challenge')
 %
 %          konvid_path: path to the KoNViD-1k video quality  
-%          database (e.g. 'd:\\konvid1k')
+%          database (e.g. 'd:/konvid1k')
 %
 %          livevqc_path: path to the LIVE-VQC video quality 
-%          database (e.g. 'd:\\livevqc')
+%          database (e.g. 'd:/livevqc')
 %
 %          cpugpu: defined if CPU or GPU is used for training
 %          and testing the CNN model, use either 'cpu' or 'gpu'
@@ -32,11 +32,11 @@ function out = masterScript(livec_path, ...
 % Phase 1: setup and testing for proper configuration
 %
                         
-cnn_model_file = '.\\CNN_model.mat';
-livec_patches_path =  '.\\livec_patches';
-konvid_feature_file = '.\\KoNViD_features.mat';
-livevqc_feature_file = '.\\LIVEVQC_features.mat';
-result_file = '.\\results.csv';
+cnn_model_file = ['.' filesep 'CNN_model.mat'];
+livec_patches_path =  ['.' filesep 'livec_patches'];
+konvid_feature_file = ['.' filesep 'KoNViD_features.mat'];
+livevqc_feature_file = ['.' filesep 'LIVEVQC_features.mat'];
+result_file = ['.' filesep 'results.csv'];
 
 out = 0;
 
@@ -47,11 +47,11 @@ if not(isfolder(konvid_path))
     fprintf('KoNViD-1k database not found in the given folder.\n');
     return;
 end
-if length(dir([konvid_path '\\*.mp4'])) ~= 1200
+if length(dir([konvid_path filesep '*.mp4'])) ~= 1200
     fprintf('KoNViD-1k database does not have all the video files.\n');
     return;
 end
-if not(isfile([konvid_path '\\KoNViD_1k_attributes.csv']))
+if not(isfile([konvid_path filesep 'KoNViD_1k_attributes.csv']))
     fprintf('KoNViD-1k metadata file not available.\n');
     return;
 end
@@ -63,11 +63,11 @@ if not(isfolder(livevqc_path))
     fprintf('LIVE-VQC database not found in the given folder.\n');
     return;
 end
-if length(dir([livevqc_path '\\*.mp4'])) ~= 585
+if length(dir([livevqc_path filesep '*.mp4'])) ~= 585
     fprintf('LIVE-VQC database does not have all the video files.\n');
     return;
 end
-if not(isfile([livevqc_path '\\LIVE_VQC.xlsx']))
+if not(isfile([livevqc_path filesep 'LIVE_VQC.xlsx']))
     fprintf('LIVE-VQC metadata file not available.\n');
     return;
 end
@@ -78,7 +78,7 @@ end
 make_patches = 1;
 if not(isfolder(livec_patches_path))
     mkdir(livec_patches_path);
-elseif length(dir([livec_patches_path '\\*.png'])) == 41856
+elseif length(dir([livec_patches_path filesep '*.png'])) == 41856
     fprintf('Looks like training patches exist already.\n');
     button = input('Do you want to rewrite [y/N]?\n','s');
 	if not(strcmp(button,'y')) && not(strcmp(button,'Y'))
@@ -91,9 +91,9 @@ if make_patches
         fprintf('LIVE Challenge dataset not found! Check the path.\n');
         return;
     else
-        if length(dir([livec_path '\\images\\*.*'])) ~= 1166 || ...
-           not(isfile([livec_path '\\data\\allmos_release.mat'])) || ...
-           not(isfile([livec_path '\\data\\allstddev_release.mat']))
+        if length(dir([livec_path filesep 'Images' filesep '*.*'])) ~= 1166 || ...
+           not(isfile([livec_path filesep 'Data' filesep 'AllMOS_release.mat'])) || ...
+           not(isfile([livec_path filesep 'Data' filesep 'AllStdDev_release.mat']))
             fprintf('LIVE Challenge dataset not properly installed.\n');
             return;        
         end
