@@ -15,7 +15,7 @@ The model is implemented in Matlab (we have used version R2018b), including Imag
 For reproducing the results in ACM MM paper, you can use the script `masterScript(livec_path, konvid_path, livevqc_path, cpugpu)` as in the example below:
 
 ```
->> masterScript('c:\\live_challenge', 'c:\\konvid', 'c:\\live-vqc', 'gpu');
+>> masterScript('c:/live_challenge', 'c:/konvid', 'c:/live-vqc', 'gpu');
 ```
 
 In the example above, it is assumed that the LIVE Challenge, KoNViD-1k, and LIVE-VQC have been installed in directories _c:\live_challenge_, _c:\konvid_, and _c:\live-vqc_, respectively. The fourth parameter can be set to either `'cpu'` or `'gpu'`, and defines whether CPU or GPU is used for training and testing the CNN model. The script writes the results in CSV file _results.csv_ in the current directory.
@@ -30,7 +30,7 @@ In Matlab, the training data (224x224 patches) can be created by using:
 ```
 >> processLiveChallenge(path, out_path);
 ```
-where _path_ is the path to the LIVE Challenge database (e.g. `'c:\\live_challenge'`) and _out_path_ is the path to the produced training patches (e.g. `'.\\training_patches'`). The script will produce training images and their respective probabilistic quality scores and store them in Matlab data file _LiveC_prob.mat_ in the current path.
+where _path_ is the path to the LIVE Challenge database (e.g. `'c:/live_challenge'`) and _out_path_ is the path to the produced training patches (e.g. `'./training_patches'`). The script will produce training images and their respective probabilistic quality scores and store them in Matlab data file _LiveC_prob.mat_ in the current path.
 
 
 ### 2) Training the CNN model by using the created training images 
@@ -39,7 +39,7 @@ For training the CNN feature extractor, use:
 ```
 >> trainCNNmodel(path, cnnfile, cpugpu);
 ```
-where _path_ is the path to the training patches (e.g. `'.\\training_patches'`), _cnnfile_ is the file where the model will be saved (e.g. `'CNN_model.mat'`), and _cpugpu_ is either `'cpu'` or `'gpu'`.
+where _path_ is the path to the training patches (e.g. `'./training_patches'`), _cnnfile_ is the file where the model will be saved (e.g. `'CNN_model.mat'`), and _cpugpu_ is either `'cpu'` or `'gpu'`.
 
 You can also download pre-trained model for Matlab [here](https://mega.nz/file/Tdxi1IAQ#_G6y6UXcOdjPsWaVhVULPcqwMNmh0YW26Jhg-pcC6aY).
 
@@ -49,13 +49,13 @@ For extracting KoNViD-1k features, use:
 ```
 >>  computeFeaturesForKoNViD1k(konvid_path, konvid_feature_file, cnnfile, cpugpu);
 ```
-where _konvid_path_ is the path to KoNViD-1k dataset (e.g. `'c:\\konvid'`), _konvid_feature_file_ defines the Matlab data file where the features will be saved (e.g. `'.\\konvid_features.mat'`), _cnnfile_ is the file for the CNN model (e.g. `'CNN_model.mat'`), and _cpugpu_ is either `'cpu'` or `'gpu'`. Note that KoNViD-1k metadata file _KoNViD_1k_attributes.csv_ must be in the database folder.
+where _konvid_path_ is the path to KoNViD-1k dataset (e.g. `'c:/konvid'`), _konvid_feature_file_ defines the Matlab data file where the features will be saved (e.g. `'./konvid_features.mat'`), _cnnfile_ is the file for the CNN model (e.g. `'CNN_model.mat'`), and _cpugpu_ is either `'cpu'` or `'gpu'`. Note that KoNViD-1k metadata file _KoNViD_1k_attributes.csv_ must be in the database folder.
 
 For extracting LIVE-VQC features, use:
 ```
 >>  computeFeaturesForLIVEVQC(livevqc_path, livevqc_feature_file, cnnfile, cpugpu);
 ```
-where _livevqc_path_ is the path to LIVE-VQC dataset (e.g. 'c:\\live-vqc'), _livevqc_feature_file_ defines the Matlab data file where the features will be saved (e.g. `'.\\livevqc_features.mat'`), _cnnfile_ is the file for the CNN model (e.g. `'CNN_model.mat'`), and _cpugpu_ is either `'cpu'` or `'gpu'`.
+where _livevqc_path_ is the path to LIVE-VQC dataset (e.g. 'c:/live-vqc'), _livevqc_feature_file_ defines the Matlab data file where the features will be saved (e.g. `'./livevqc_features.mat'`), _cnnfile_ is the file for the CNN model (e.g. `'CNN_model.mat'`), and _cpugpu_ is either `'cpu'` or `'gpu'`.
 
 ### 4) Training and testing the regression models 
 
