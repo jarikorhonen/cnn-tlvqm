@@ -18,8 +18,8 @@ function res = processLiveChallenge(path, out_path)
 
     % First, load the MOS scores and stadard deviations
     % Make sure to change the paths to point to the database
-    load([path '\\data\\allmos_release.mat']);
-    load([path '\\data\\allstddev_release.mat']);
+    load([path filesep 'Data' filesep 'AllMOS_release.mat']);
+    load([path filesep 'Data' filesep 'AllStdDev_release.mat']);
 
     % Use truncated Gaussian distribution to approximate 5-point
     % probabilistic representation of the quality scores
@@ -35,10 +35,10 @@ function res = processLiveChallenge(path, out_path)
 
     % Save the results
     LiveC_prob = bins;
-    save('.\\LiveC_prob.mat','LiveC_prob');
+    save(['.' filesep 'LiveC_prob.mat'],'LiveC_prob');
 
     % Load image names in Live Challenge database
-    load([path '\\data\\allImages_release.mat']);
+    load([path filesep 'data' filesep 'allImages_release.mat']);
     patch_size = [224 224];
     indicator_text = ''; %sprintf('Processing image %d/%d', ...
                           %   0,length(AllImages_release));
@@ -54,7 +54,7 @@ function res = processLiveChallenge(path, out_path)
         fprintf(indicator_text);
         %len_ind = length(indicator_text);
         
-        imfile = sprintf('%s\\Images\\%s', path, AllImages_release{im_no});
+        imfile = sprintf('%s%sImages%s%s', path, filesep, filesep, AllImages_release{im_no});
         
         % Initialize variables
         im = imread(imfile);
@@ -79,8 +79,8 @@ function res = processLiveChallenge(path, out_path)
                 
                 % Make four rotated versions of each patch
                 for q=1:4
-                    filename = sprintf('%s\\%04d_%02d.png', ...
-                                       out_path, im_no-7, num_patch);               
+                    filename = sprintf('%s%s%04d_%02d.png', ...
+                                       out_path, filesep, im_no-7, num_patch);               
                                    
                     imwrite(im_patch,filename); 
                     im_patch = imrotate(im_patch,90);
@@ -89,7 +89,7 @@ function res = processLiveChallenge(path, out_path)
             end
         end 
     end
-    fprintf(repmat(char(8), ind_len));
+    fprintf(repmat(char(8), len_ind));
     fprintf('Ready!\n');
     res = 0;   
 end
