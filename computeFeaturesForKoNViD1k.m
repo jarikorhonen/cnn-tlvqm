@@ -18,7 +18,7 @@ function features = computeFeaturesForKoNViD1k(konvid_path, ...
                                            
     % Read metadata for KoNViD-1k
     konvid_metadata_file = 'KoNViD_1k_attributes.csv';
-    if not(isfile([konvid_path '\\' konvid_metadata_file]))
+    if not(isfile([konvid_path filesep konvid_metadata_file]))
         fprintf('KoNViD-1k metadata file not found!\n');
         fprintf('Make sure %s is in %s.\n', konvid_metadata_file, ...
                                             konvid_path);
@@ -26,7 +26,7 @@ function features = computeFeaturesForKoNViD1k(konvid_path, ...
         features = [];
         return;
     end
-    [data,datatxt] = xlsread([konvid_path '\\' konvid_metadata_file]);
+    [data,datatxt] = xlsread([konvid_path filesep konvid_metadata_file]);
     file_id = datatxt(2:end,3);
     mos = (data(:,4)-1)./4;
 
@@ -35,7 +35,7 @@ function features = computeFeaturesForKoNViD1k(konvid_path, ...
     indicator_text = '';
     for i=1:length(file_id)
 
-        video_path = [konvid_path '\\' file_id{i}];
+        video_path = [konvid_path filesep file_id{i}];
         fprintf(repmat(char(8), 1, length(indicator_text)));
         indicator_text = sprintf('Computing features for file %d/%d\n', ...
                                  i, length(file_id));
