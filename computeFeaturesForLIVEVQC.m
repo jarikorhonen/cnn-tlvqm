@@ -17,8 +17,8 @@ function features = computeFeaturesForLIVEVQC(livevqc_path, ...
     load(cnnfile,'netTransfer');                                       
                                            
     % Read metadata for KoNViD-1k
-    livevqc_metadata_file = 'LIVE_VQC.xlsx';
-    if not(isfile([livevqc_path '\\' livevqc_metadata_file]))
+    livevqc_metadata_file = 'data.mat';
+    if not(isfile([livevqc_path pathsep livevqc_metadata_file]))
         fprintf('LIVE-VQC metadata file not found!\n');
         fprintf('Make sure %s is in %s.\n', livevqc_metadata_file, ...
                                             livevqc_path);
@@ -26,19 +26,19 @@ function features = computeFeaturesForLIVEVQC(livevqc_path, ...
         features = [];
         return;
     end
-    [data,datatxt] = xlsread([livevqc_path '\\' livevqc_metadata_file]);
+    load([livevqc_path pathsep livevqc_metadata_file]);
     file_id = datatxt(2:end,1);
-    mos = data(:,1)./100;
+    mos = mos./100;
 
     % Loop through all the files to compute features
     features={};
     indicator_text = '';
-    for i=1:length(file_id)
+    for i=1:length(video_list)
 
-        video_path = [livevqc_path '\\' file_id{i}];
+        video_path = [livevqc_path pathsep video_list{i}];
         fprintf(repmat(char(8), 1, length(indicator_text)));
         indicator_text = sprintf('Computing features for file %d/%d\n', ...
-                                 i, length(file_id));
+                                 i, length(video_list));
         fprintf(indicator_text);
 
         % Compute features
