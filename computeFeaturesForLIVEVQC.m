@@ -18,7 +18,7 @@ function features = computeFeaturesForLIVEVQC(livevqc_path, ...
                                            
     % Read metadata for KoNViD-1k
     livevqc_metadata_file = 'data.mat';
-    if not(isfile([livevqc_path pathsep livevqc_metadata_file]))
+    if not(isfile([livevqc_path filesep livevqc_metadata_file]))
         fprintf('LIVE-VQC metadata file not found!\n');
         fprintf('Make sure %s is in %s.\n', livevqc_metadata_file, ...
                                             livevqc_path);
@@ -26,8 +26,7 @@ function features = computeFeaturesForLIVEVQC(livevqc_path, ...
         features = [];
         return;
     end
-    load([livevqc_path pathsep livevqc_metadata_file]);
-    file_id = datatxt(2:end,1);
+    load([livevqc_path filesep livevqc_metadata_file]);
     mos = mos./100;
 
     % Loop through all the files to compute features
@@ -35,7 +34,8 @@ function features = computeFeaturesForLIVEVQC(livevqc_path, ...
     indicator_text = '';
     for i=1:length(video_list)
 
-        video_path = [livevqc_path pathsep video_list{i}];
+        video_path = [livevqc_path filesep video_list{i}];
+        [livevqc_path filesep video_list{i}]
         fprintf(repmat(char(8), 1, length(indicator_text)));
         indicator_text = sprintf('Computing features for file %d/%d\n', ...
                                  i, length(video_list));
