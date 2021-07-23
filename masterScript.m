@@ -67,7 +67,7 @@ if length(dir([livevqc_path filesep '*.mp4'])) ~= 585
     fprintf('LIVE-VQC database does not have all the video files.\n');
     return;
 end
-if not(isfile([livevqc_path filesep 'LIVE_VQC.xlsx']))
+if not(isfile([livevqc_path filesep 'data.mat']))
     fprintf('LIVE-VQC metadata file not available.\n');
     return;
 end
