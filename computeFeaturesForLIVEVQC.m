@@ -35,7 +35,6 @@ function features = computeFeaturesForLIVEVQC(livevqc_path, ...
     for i=1:length(video_list)
 
         video_path = [livevqc_path filesep video_list{i}];
-        [livevqc_path filesep video_list{i}]
         fprintf(repmat(char(8), 1, length(indicator_text)));
         indicator_text = sprintf('Computing features for file %d/%d\n', ...
                                  i, length(video_list));
